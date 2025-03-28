@@ -68,3 +68,22 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+DECLARE @folder_name NVARCHAR(128) = 'TEST';
+DECLARE @project_name NVARCHAR(128) = 'Projects';
+DECLARE @project_stream VARBINARY(MAX);
+
+-- Read the .ispac file into a variable
+SET @project_stream = (SELECT * FROM OPENROWSET(BULK 'output/Development/Project.ispac', SINGLE_BLOB) AS ProjectFile);
+
+-- Create the folder if it does not exist
+IF NOT EXISTS (SELECT 1 FROM catalog.folders WHERE name = @folder_name)
+BEGIN
+    EXEC catalog.create_folder @folder_name, 'Deployed from GitHub Actions';
+END
+
+-- Deploy the SSIS project
+EXEC catalog.deploy_project @folder_name, @project_name, @project_stream;
+
