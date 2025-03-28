@@ -81,6 +81,11 @@ SET @project_stream = (SELECT * FROM OPENROWSET(BULK 'output/Development/Project
 -- Create the folder if it does not exist
 IF NOT EXISTS (SELECT 1 FROM catalog.folders WHERE name = @folder_name)
 BEGIN
+
+`- name: Deploy SSIS Project to SSISDB
+  run: |
+    sqlcmd -S ${{ vars.SQL_SERVER }} -U ${{ secrets.SQL_SERVER_USERNAME }} -P ${{ secrets.SQL_SERVER_PASSWORD }} -d SSISDB -i .github/scripts/deploy_ssis.sql
+`
     EXEC catalog.create_folder @folder_name, 'Deployed from GitHub Actions';
 END
 
