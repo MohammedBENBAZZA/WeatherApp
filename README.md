@@ -92,3 +92,4 @@ END
 -- Deploy the SSIS project
 EXEC catalog.deploy_project @folder_name, @project_name, @project_stream;
 
+You do not have permission to use the bulk load statement.
