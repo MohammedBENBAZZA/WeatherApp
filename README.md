@@ -93,3 +93,5 @@ END
 EXEC catalog.deploy_project @folder_name, @project_name, @project_stream;
 
 You do not have permission to use the bulk load statement.
+
+GRANT ADMINISTER BULK OPERATIONS TO [your_sql_user];
